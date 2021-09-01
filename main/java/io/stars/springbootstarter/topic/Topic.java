@@ -1,8 +1,13 @@
 package io.stars.springbootstarter.topic;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity  			//@Entity-with this jpa knows to create a table Topic with member variables as columns
 public class Topic {
 
-	private String id;
+	@Id
+	private String id; //id is annotated with @Id . acts as a primary key in db
 	private String name;
 	private String description;
 	public String getId() {

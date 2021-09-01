@@ -3,45 +3,45 @@ package io.stars.springbootstarter.topic;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TopicService { 
 	
-	private List<Topic> topics = new ArrayList<>(Arrays.asList(
-			new Topic("spring", "Spring Framework", "Spring Framework Description"),
-			new Topic("java", "Core Java", "Core Java Description"),
-			new Topic("java script", "Java Script", "Java Script Description")
-		));
+	@Autowired
+	private TopicRepository topicRepository;  
 	
-	public List<Topic> getAllTopics(){
+	public List<Topic> getAllTopics(){ 
+		
+		List<Topic> topics = new ArrayList<>();
+		topicRepository.findAll().forEach(topics::add); //getting all instances from the table.does everything.connect->fetch->convert .find All returns an iterable
 		return topics;
 	}
 	
-	public Topic getTopic(String id) {
+	public Topic getTopic(String id) { //id is the primary key
 		
-		return topics.stream().filter(t -> t.getId().equals(id)).findFirst().get();
+		Optional<Topic> optionalTopic = topicRepository.findById(id);
+		Topic topic = new Topic();
+		if(optionalTopic.isPresent())
+			topic = optionalTopic.get();
+		return topic;
+			 
 	}
  
-	public void addTopic(Topic topic) {
-		topics.add(topic); 
-		
+	public void addTopic(Topic topic) { 
+		topicRepository.save(topic);
 	}
 
 	public void updateTopic(String id, Topic topic) {
 
-		for(int i=0; i<topics.size(); i++) { 
-			Topic t = topics.get(i);
-			if(topic.getId().equals(t.getId())) {  
-				 topics.set(i, topic);
-				 return;
-			}
-		} 
+		topicRepository.save(topic); //repository checks if there is an id. if yes then updates it, otherwise inserts
 	}
 
 	public void deleteTopic(String id) {
 		
-		topics.removeIf(topic -> topic.getId().equals(id));
+		topicRepository.deleteById(id);
 	} 
 }

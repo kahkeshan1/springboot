@@ -17,12 +17,14 @@ public class TopicController {
 	private TopicService topicService;
 	
 	@RequestMapping("/topics")
-	public List<Topic> getAllTopics() { 
+	public List<Topic> getAllTopics() {  
+		
 		return topicService.getAllTopics();
 	}
 	
 	@RequestMapping("/topics/{var}")
 	public Topic getTopic(@PathVariable("var") String id) { //maps var to id . can just use @PathVariable String id - if variable name and arguement name is same
+		
 		return topicService.getTopic(id);
 	}
 	
